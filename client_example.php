@@ -23,34 +23,14 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Jumbojett\OpenIDConnectClient;
+use grossrucker\OpenIDConnectClient;
 
 $oidc = new OpenIDConnectClient(
     'http://myproviderURL.com/',
-    'ClientIDHere',
-    'ClientSecretHere'
+    'ClientIDHere'
 );
 
-$oidc->authenticate();
-$name = $oidc->requestUserInfo('given_name');
+$token="header.claims.signature";
+var_dump($oidc->verifyJWT($token));
 
 ?>
-
-<html>
-<head>
-    <title>Example OpenID Connect Client Use</title>
-    <style>
-        body {
-            font-family: 'Lucida Grande', Verdana, Arial, sans-serif;
-        }
-    </style>
-</head>
-<body>
-
-    <div>
-        Hello <?php echo $name; ?>
-    </div>
-
-</body>
-</html>
-

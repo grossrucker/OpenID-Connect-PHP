@@ -1,6 +1,6 @@
 {
-    "name": "jumbojett/openid-connect-php",
-    "description": "Bare-bones OpenID Connect client",
+    "name": "grossrucker/openid-connect-php",
+    "description": "Bare-bones OpenID Connect client based on jumbojett/openid-connect-php",
     "require": {
         "php": ">=5.4",
         "phpseclib/phpseclib" : "2.0.1",

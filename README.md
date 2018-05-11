@@ -14,12 +14,34 @@ A special thanks goes to Justin Richer and Amanda Anganes for their help and sup
 ## Install ##
  1. Install library using composer
 ```
-composer require jumbojett/openid-connect-php
+composer require grossrucker/openid-connect-php
 ```
  2. Include composer autoloader
 ```php
 require __DIR__ . '/vendor/autoload.php';
 ```
+
+## CHANGES to the original repo ##
+
+added the  functions
+```php
+public function verifyJWT($id_token)
+private function verifyJWTclaimsWONonce($claims)```
+
+Example:
+```php
+use Gumba\OpenIDConnectClient;
+
+$oidc = new OpenIDConnectClient(
+    'issuer',
+    'client_id'
+);
+
+$token="header.claims.signature";
+var_dump($oidc->verifyJWT($token));
+
+```
+
 
 ## Example 1: Basic Client ##
 

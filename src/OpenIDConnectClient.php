@@ -21,7 +21,7 @@
  *
  */
 
-namespace Jumbojett;
+namespace grossrucker;
 
 /**
  * Use session to manage a nonce
@@ -1217,6 +1217,48 @@ class OpenIDConnectClient
         }
 
     }
+
+
+    /**
+     * Verify Claims without nonce
+     * 
+     * @param object $claims
+     * @return bool
+     */
+    private function verifyJWTclaimsWONonce($claims) {
+        return (($claims->iss == $this->getProviderURL() || $claims->iss == $this->getWellKnownIssuer() || $claims->iss == $this->getWellKnownIssuer(true))
+                && (($claims->aud == $this->clientID) || (in_array($this->clientID, $claims->aud)))
+                && ( !isset($claims->exp) || $claims->exp >= time())
+                && ( !isset($claims->nbf) || $claims->nbf <= time())
+        );
+    }
+
+    /**
+     * Verify JWT and Claims
+     */
+
+    public function verifyJWT($id_token){
+        $claims = $this->decodeJWT($id_token, 1);
+
+        // Verify the signature
+        if ($this->canVerifySignatures()) {
+            if (!$this->getProviderConfigValue('jwks_uri')) {
+                throw new OpenIDConnectClientException ("Unable to verify signature due to no jwks_uri being defined");
+            }
+            if (!$this->verifyJWTsignature($id_token)) {
+                throw new OpenIDConnectClientException ("Unable to verify signature");
+            }
+            if(!$this->verifyJWTclaimsWONonce($claims)){
+                throw new OpenIDConnectClientException ("Unable to verify JWT claims");
+            }
+        } else {
+            user_error("Warning: JWT signature verification unavailable.");
+            return false;
+        }
+
+        return true;
+    }
+
 
     /**
      * @return mixed
